@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube SEO Content Generator</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #FF0000;
+            --primary-dark: #CC0000;
+            --secondary: #282828;
+            --light-bg: #f9f9f9;
+            --card-bg: #ffffff;
+            --text: #333333;
+            --text-light: #606060;
+            --border: #e0e0e0;
+            --success: #4CAF50;
+            --warning: #FF9800;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--light-bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(255, 0, 0, 0.15);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-icon i {
+            font-size: 28px;
+            color: var(--primary);
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .content-generator {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 900px) {
+            .content-generator {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .input-section {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .output-section {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--primary);
+        }
+
+        .usage-info {
+            background: #e8f4ff;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #1a73e8;
+        }
+
+        .usage-text {
+            font-weight: 500;
+        }
+
+        .usage-count {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .platform-selector {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .platform-btn {
+            flex: 1;
+            min-width: 150px;
+            padding: 14px 20px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            background: white;
+            color: var(--text);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .platform-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .platform-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(255, 0, 0, 0.2);
+        }
+
+        .input-wrapper {
+            margin-bottom: 25px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: inherit;
+            resize: none;
+            outline: none;
+            transition: all 0.2s ease;
+            min-height: 140px;
+            background: #fafafa;
+        }
+
+        .input-field:focus {
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(255, 0, 0, 0.1);
+        }
+
+        .keyword-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.2s ease;
+            margin-bottom: 15px;
+        }
+
+        .keyword-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 0, 0, 0.1);
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .generate-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(255, 0, 0, 0.4);
+        }
+
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .suggestion-btn {
+            padding: 10px 16px;
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            background: white;
+            color: var(--text-light);
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .suggestion-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: #fff5f5;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .typing {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 16px;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .dot {
+            width: 7px;
+            height: 7px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: blink 1.2s infinite ease-in-out;
+        }
+
+        .dot:nth-child(1) { animation-delay: 0s; }
+        .dot:nth-child(2) { animation-delay: 0.2s; }
+        .dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes blink {
+            0%, 80%, 100% { opacity: 0.3; transform: translateY(0); }
+            40% { opacity: 1; transform: translateY(-3px); }
+        }
+
+        .output-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+
+        .output-tab {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            font-weight: 600;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .output-tab.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .output-content {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .output-item {
+            background: #f9f9f9;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .output-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .output-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .copy-btn {
+            background: #f0f0f0;
+            border: none;
+            border-radius: 8px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-light);
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            background: #e0e0e0;
+            color: var(--text);
+        }
+
+        .copy-btn.copied {
+            background: #e8f5e9;
+            color: var(--success);
+        }
+
+        .description-output {
+            white-space: pre-line;
+            line-height: 1.6;
+        }
+
+        .titles-output {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .title-option {
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .tags-output {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tag {
+            padding: 8px 14px;
+            background: white;
+            border-radius: 50px;
+            border: 1px solid var(--border);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tag i {
+            color: var(--primary);
+            cursor: pointer;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+
+        .modal-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 36px;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--secondary);
+        }
+
+        .modal-message {
+            color: var(--text-light);
+            margin-bottom: 25px;
+            line-height: 1.6;
+            font-size: 1.05rem;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 140px;
+        }
+
+        .modal-btn.primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
+        }
+
+        .modal-btn.primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(255, 0, 0, 0.4);
+        }
+
+        .modal-btn.secondary {
+            background: #f3f4f6;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .modal-btn.secondary:hover {
+            background: #e5e7eb;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .platform-selector {
+                flex-direction: column;
+            }
+            
+            .platform-btn {
+                width: 100%;
+            }
+            
+            .input-section, .output-section {
+                padding: 20px;
+            }
+            
+            .modal-actions {
+                flex-direction: column;
+            }
+            
+            .modal-btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .input-section, .output-section {
+                padding: 15px;
+            }
+            
+            .section-title {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fab fa-youtube"></i>
+                </div>
+                <h1>YouTube SEO Generator</h1>
+            </div>
+            <p class="subtitle">Create compelling, SEO-optimized YouTube titles, descriptions, and tags to maximize your video's visibility and engagement</p>
+        </header>
+
+        <div class="content-generator">
+            <div class="input-section">
+                <h2 class="section-title"><i class="fas fa-edit"></i> Content Details</h2>
+                
+                <div class="usage-info">
+                    <div class="usage-text">You have <span class="usage-count" id="usageCount">3</span> uses remaining in the next 5 hours</div>
+                </div>
+
+                <div class="platform-selector">
+                    <button class="platform-btn active" data-platform="description">
+                        <i class="fas fa-align-left"></i>
+                        Description
+                    </button>
+                    <button class="platform-btn" data-platform="title">
+                        <i class="fas fa-heading"></i>
+                        Title
+                    </button>
+                    <button class="platform-btn" data-platform="tags">
+                        <i class="fas fa-tags"></i>
+                        Tags
+                    </button>
+                </div>
+
+                <div class="input-wrapper">
+                    <textarea
+                        id="promptInput"
+                        class="input-field"
+                        placeholder="Describe your video content, target audience, and key points..."
+                        aria-label="Enter video details"
+                    ></textarea>
+                </div>
+
+                <div class="input-wrapper" id="keywordsContainer">
+                    <input
+                        type="text"
+                        id="keywordInput"
+                        class="keyword-input"
+                        placeholder="Enter primary keywords (comma separated)"
+                        aria-label="Enter keywords"
+                    >
+                    <div class="suggestions">
+                        <button class="suggestion-btn" data-suggestion="SEO, YouTube algorithm, ranking">SEO</button>
+                        <button class="suggestion-btn" data-suggestion="tutorial, how to, guide">Tutorial</button>
+                        <button class="suggestion-btn" data-suggestion="review, unboxing, first impressions">Review</button>
+                    </div>
+                </div>
+
+                <button id="generateBtn" class="generate-btn">
+                    <i class="fas fa-magic"></i>
+                    Generate YouTube Content
+                </button>
+
+                <div class="suggestions">
+                    <button class="suggestion-btn" data-suggestion="Create a tutorial video about using the latest video editing software">Video Editing Tutorial</button>
+                    <button class="suggestion-btn" data-suggestion="Review the newest smartphone and its camera features">Smartphone Review</button>
+                    <button class="suggestion-btn" data-suggestion="Create a vlog about daily life as a digital nomad">Digital Nomad Vlog</button>
+                </div>
+            </div>
+
+            <div class="output-section">
+                <h2 class="section-title"><i class="fas fa-file-alt"></i> Generated Content</h2>
+                
+                <div class="output-tabs">
+                    <button class="output-tab active" data-tab="description">Description</button>
+                    <button class="output-tab" data-tab="title">Titles</button>
+                    <button class="output-tab" data-tab="tags">Tags</button>
+                </div>
+                
+                <div class="output-content">
+                    <div class="output-item" id="descriptionOutput">
+                        <div class="output-header">
+                            <div class="output-title">
+                                <i class="fas fa-align-left"></i>
+                                YouTube Description
+                            </div>
+                            <button class="copy-btn" aria-label="Copy description">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                        <div class="description-output" id="descriptionContent">
+                            Your generated description will appear here. It will include SEO-optimized content, relevant keywords, timestamps, and calls-to-action.
+                        </div>
+                    </div>
+                    
+                    <div class="output-item hidden" id="titlesOutput">
+                        <div class="output-header">
+                            <div class="output-title">
+                                <i class="fas fa-heading"></i>
+                                YouTube Titles
+                            </div>
+                            <button class="copy-btn" aria-label="Copy all titles">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                        <div class="titles-output" id="titlesContent">
+                            <div class="title-option">Your first generated title will appear here</div>
+                            <div class="title-option">Your second generated title will appear here</div>
+                            <div class="title-option">Your third generated title will appear here</div>
+                        </div>
+                    </div>
+                    
+                    <div class="output-item hidden" id="tagsOutput">
+                        <div class="output-header">
+                            <div class="output-title">
+                                <i class="fas fa-tags"></i>
+                                YouTube Tags
+                            </div>
+                            <button class="copy-btn" aria-label="Copy all tags">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                        <div class="tags-output" id="tagsContent">
+                            <div class="tag">youtube <i class="fas fa-copy copy-tag"></i></div>
+                            <div class="tag">seo <i class="fas fa-copy copy-tag"></i></div>
+                            <div class="tag">optimization <i class="fas fa-copy copy-tag"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <div class="typing">
+                Generating your YouTube content
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+        </div>
+
+        <footer>
+            <p>YouTube SEO Generator &copy; 2023 | Boost your YouTube visibility with AI-powered content</p>
+        </footer>
+    </div>
+
+    <!-- Modal for usage limit reached -->
+    <div class="modal-overlay" id="limitModal">
+        <div class="modal">
+            <div class="modal-icon">
+                <i class="fas fa-mobile-alt"></i>
+            </div>
+            <h2 class="modal-title">Usage Limit Reached</h2>
+            <p class="modal-message">
+                You've used all 3 free generations in the last 5 hours. To continue creating YouTube content, please download our mobile app or wait for the limit to reset in <span id="timeRemaining">5 hours</span>.
+            </p>
+            <div class="modal-actions">
+                <button class="modal-btn primary" id="downloadBtn">
+                    <i class="fas fa-download"></i> Download App
+                </button>
+                <button class="modal-btn secondary" id="closeModalBtn">
+                    <i class="fas fa-clock"></i> Wait
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const generateBtn = document.getElementById('generateBtn');
+        const promptInput = document.getElementById('promptInput');
+        const keywordInput = document.getElementById('keywordInput');
+        const loading = document.getElementById('loading');
+        const usageCount = document.getElementById('usageCount');
+        const limitModal = document.getElementById('limitModal');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const timeRemaining = document.getElementById('timeRemaining');
+        
+        // Output elements
+        const descriptionContent = document.getElementById('descriptionContent');
+        const titlesContent = document.getElementById('titlesContent');
+        const tagsContent = document.getElementById('tagsContent');
+        const descriptionOutput = document.getElementById('descriptionOutput');
+        const titlesOutput = document.getElementById('titlesOutput');
+        const tagsOutput = document.getElementById('tagsOutput');
+        
+        // State variables
+        let selectedPlatform = 'description';
+        let isGenerating = false;
+        let currentTab = 'description';
+        
+        // Usage tracking
+        const USAGE_LIMIT = 3;
+        const TIME_LIMIT = 5 * 60 * 60 * 1000; // 5 hours in milliseconds
+        
+        // Initialize usage tracking
+        function initUsageTracking() {
+            let usageData = JSON.parse(localStorage.getItem('youtubeGeneratorUsage')) || {
+                count: 0,
+                startTime: null
+            };
+            
+            // Check if time limit has passed
+            if (usageData.startTime && (Date.now() - usageData.startTime) > TIME_LIMIT) {
+                // Reset usage
+                usageData = {
+                    count: 0,
+                    startTime: null
+                };
+                localStorage.setItem('youtubeGeneratorUsage', JSON.stringify(usageData));
+            }
+            
+            return usageData;
+        }
+        
+        // Update usage display
+        function updateUsageDisplay(usageData) {
+            const remaining = USAGE_LIMIT - usageData.count;
+            usageCount.textContent = remaining;
+            
+            if (remaining <= 0) {
+                generateBtn.disabled = true;
+                
+                // Calculate time remaining
+                if (usageData.startTime) {
+                    const endTime = usageData.startTime + TIME_LIMIT;
+                    const timeLeft = endTime - Date.now();
+                    const hoursLeft = Math.ceil(timeLeft / (60 * 60 * 1000));
+                    timeRemaining.textContent = `${hoursLeft} hour${hoursLeft > 1 ? 's' : ''}`;
+                }
+            } else {
+                generateBtn.disabled = false;
+            }
+        }
+        
+        // Record usage
+        function recordUsage() {
+            let usageData = JSON.parse(localStorage.getItem('youtubeGeneratorUsage')) || {
+                count: 0,
+                startTime: null
+            };
+            
+            // If first usage in this period, set start time
+            if (usageData.count === 0) {
+                usageData.startTime = Date.now();
+            }
+            
+            usageData.count++;
+            localStorage.setItem('youtubeGeneratorUsage', JSON.stringify(usageData));
+            
+            return usageData;
+        }
+        
+        // Show limit modal
+        function showLimitModal() {
+            limitModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        // Hide limit modal
+        function hideLimitModal() {
+            limitModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        // Initialize usage tracking on page load
+        let usageData = initUsageTracking();
+        updateUsageDisplay(usageData);
+
+        // Platform selection
+        document.querySelectorAll('.platform-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.platform-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                selectedPlatform = btn.dataset.platform;
+                
+                // Update placeholder text based on platform
+                const placeholderTexts = {
+                    description: 'Describe your video content, target audience, and key points...',
+                    title: 'Describe your video topic and what makes it unique...',
+                    tags: 'Describe your video content and primary keywords...'
+                };
+                
+                promptInput.placeholder = placeholderTexts[selectedPlatform] || 'Describe your video content...';
+                
+                // Show/hide keyword input based on platform
+                const keywordsContainer = document.getElementById('keywordsContainer');
+                if (selectedPlatform === 'tags') {
+                    keywordsContainer.style.display = 'none';
+                } else {
+                    keywordsContainer.style.display = 'block';
+                }
+            });
+        });
+
+        // Output tabs
+        document.querySelectorAll('.output-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.output-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentTab = tab.dataset.tab;
+                
+                // Show the selected output, hide others
+                descriptionOutput.classList.toggle('hidden', currentTab !== 'description');
+                titlesOutput.classList.toggle('hidden', currentTab !== 'title');
+                tagsOutput.classList.toggle('hidden', currentTab !== 'tags');
+            });
+        });
+
+        // Handle suggestions
+        document.querySelectorAll('.suggestion-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (btn.closest('.suggestions') && btn.dataset.suggestion) {
+                    promptInput.value = btn.dataset.suggestion;
+                    promptInput.focus();
+                } else if (btn.closest('#keywordsContainer')) {
+                    keywordInput.value = btn.dataset.suggestion;
+                }
+            });
+        });
+
+        // Auto-resize textarea
+        promptInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.max(this.scrollHeight, 140) + 'px';
+        });
+
+        // Generate content
+        async function generateContent() {
+            if (isGenerating) return;
+            
+            // Check usage limit
+            if (usageData.count >= USAGE_LIMIT) {
+                showLimitModal();
+                return;
+            }
+            
+            isGenerating = true;
+
+            const topic = promptInput.value.trim();
+            if (!topic) {
+                promptInput.focus();
+                return;
+            }
+
+            loading.style.display = 'block';
+            generateBtn.disabled = true;
+
+            // Platform-specific instructions
+            const platformInstructions = {
+                description: 'Create a compelling, SEO-optimized YouTube description with strategic keywords, timestamps, and calls-to-action. Include relevant links and social media handles.',
+                title: 'Craft 3-5 irresistible, click-worthy YouTube titles that capture attention and drive views. Make them engaging and optimized for SEO.',
+                tags: 'Generate 15-20 high-impact SEO tags that help videos rank higher in YouTube search results. Include a mix of broad and specific tags.'
+            };
+
+            const keywords = keywordInput.value.trim();
+            const keywordInstruction = keywords ? ` Use these primary keywords: ${keywords}.` : '';
+            
+            const prompt = `Generate ${selectedPlatform} content for a YouTube video about "${topic}".${keywordInstruction} ${platformInstructions[selectedPlatform]}`;
+
+            const timeout = setTimeout(() => {
+                loading.style.display = 'none';
+                generateBtn.disabled = false;
+                displayGeneratedContent('Request timed out. Please try again.', 'error');
+                isGenerating = false;
+            }, 15000);
+
+            try {
+                // In a real implementation, you would call your API here
+                // For demonstration, we'll simulate an API call with a timeout
+                await new Promise(resolve => setTimeout(resolve, 2500));
+                
+                // Simulated response based on platform
+                const simulatedResponses = {
+                    description: `In this video, we explore ${topic} and share valuable insights you won't find anywhere else!\n\n📋 CHAPTERS:\n0:00 Introduction\n1:15 Key Concept Explained\n3:40 Practical Examples\n6:20 Advanced Tips\n8:50 Conclusion\n\n🔔 Subscribe for more content on ${topic.split(' ')[0]} and hit the bell icon to never miss an update!\n\n💬 Join the conversation in the comments below - we'd love to hear your thoughts and experiences with ${topic.split(' ')[0]}.\n\n📱 Follow us on social media:\nInstagram: @yourchannel\nTwitter: @yourchannel\n\n📚 Resources mentioned in this video:\n[Link to resource 1]\n[Link to resource 2]\n\n#${topic.replace(/\s+/g, '')} #YouTubeTips #ContentCreation`,
+                    
+                    title: [
+                        `The Ultimate Guide to ${topic} - You Won't Believe These Results!`,
+                        `How to Master ${topic} in 2023 - Step by Step Tutorial`,
+                        `${topic} Explained - The Secrets Professionals Don't Want You to Know`,
+                        `Why ${topic} is Changing Everything - Must Watch!`,
+                        `I Tried ${topic} For 30 Days - Here's What Happened`
+                    ],
+                    
+                    tags: [
+                        topic.replace(/\s+/g, ''),
+                        ...topic.split(' '),
+                        'youtube',
+                        'youtube algorithm',
+                        'youtube seo',
+                        'video marketing',
+                        'content creation',
+                        'youtube tips',
+                        'youtube growth',
+                        'video seo',
+                        'youtube optimization',
+                        'youtube ranking',
+                        'video ranking',
+                        'youtube success',
+                        'youtube 2023'
+                    ]
+                };
+
+                clearTimeout(timeout);
+                
+                // Record usage only on successful generation
+                usageData = recordUsage();
+                updateUsageDisplay(usageData);
+                
+                displayGeneratedContent(simulatedResponses[selectedPlatform]);
+            } catch (error) {
+                clearTimeout(timeout);
+                console.error('Error:', error);
+                displayGeneratedContent(`Error: ${error.message}. Please try again later.`, 'error');
+            } finally {
+                loading.style.display = 'none';
+                generateBtn.disabled = false;
+                isGenerating = false;
+            }
+        }
+
+        // Display generated content
+        function displayGeneratedContent(content, type = 'success') {
+            if (type === 'error') {
+                // Show error in all outputs
+                descriptionContent.textContent = content;
+                titlesContent.innerHTML = `<div class="title-option">${content}</div>`;
+                tagsContent.innerHTML = `<div class="tag">${content}</div>`;
+                return;
+            }
+            
+            if (selectedPlatform === 'description') {
+                descriptionContent.textContent = content;
+                // Switch to description tab
+                document.querySelector('[data-tab="description"]').click();
+            } else if (selectedPlatform === 'title') {
+                titlesContent.innerHTML = '';
+                content.forEach(title => {
+                    const titleElement = document.createElement('div');
+                    titleElement.className = 'title-option';
+                    titleElement.textContent = title;
+                    titlesContent.appendChild(titleElement);
+                });
+                // Switch to title tab
+                document.querySelector('[data-tab="title"]').click();
+            } else if (selectedPlatform === 'tags') {
+                tagsContent.innerHTML = '';
+                content.forEach(tag => {
+                    const tagElement = document.createElement('div');
+                    tagElement.className = 'tag';
+                    tagElement.innerHTML = `${tag} <i class="fas fa-copy copy-tag"></i>`;
+                    tagsContent.appendChild(tagElement);
+                });
+                // Switch to tags tab
+                document.querySelector('[data-tab="tags"]').click();
+            }
+        }
+
+        // Copy content to clipboard
+        function copyContent(btn, content) {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(content).then(() => {
+                    const icon = btn.querySelector('i');
+                    icon.className = 'fas fa-check';
+                    btn.classList.add('copied');
+                    setTimeout(() => {
+                        icon.className = 'fas fa-copy';
+                        btn.classList.remove('copied');
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Clipboard API failed:', err);
+                    fallbackCopy(content, btn);
+                });
+            } else {
+                fallbackCopy(content, btn);
+            }
+        }
+
+        // Fallback for clipboard copy
+        function fallbackCopy(text, btn) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                const icon = btn.querySelector('i');
+                icon.className = 'fas fa-check';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    icon.className = 'fas fa-copy';
+                    btn.classList.remove('copied');
+                }, 2000);
+            } catch (err) {
+                console.error('Fallback copy failed:', err);
+            }
+            document.body.removeChild(textarea);
+        }
+
+        // Attach generate event
+        generateBtn.addEventListener('click', generateContent);
+
+        // Attach copy events
+        document.addEventListener('click', (e) => {
+            // Copy description
+            if (e.target.closest('#descriptionOutput .copy-btn')) {
+                const content = descriptionContent.textContent;
+                copyContent(e.target.closest('.copy-btn'), content);
+            }
+            
+            // Copy all titles
+            if (e.target.closest('#titlesOutput .copy-btn')) {
+                const titles = Array.from(titlesContent.querySelectorAll('.title-option'))
+                    .map(el => el.textContent)
+                    .join('\n');
+                copyContent(e.target.closest('.copy-btn'), titles);
+            }
+            
+            // Copy all tags
+            if (e.target.closest('#tagsOutput .copy-btn')) {
+                const tags = Array.from(tagsContent.querySelectorAll('.tag'))
+                    .map(el => el.textContent.replace(' copy', ''))
+                    .join(', ');
+                copyContent(e.target.closest('.copy-btn'), tags);
+            }
+            
+            // Copy individual tag
+            if (e.target.classList.contains('copy-tag')) {
+                const tagText = e.target.closest('.tag').textContent.replace(' copy', '');
+                copyContent(e.target, tagText);
+            }
+        });
+
+        // Modal event handlers
+        downloadBtn.addEventListener('click', () => {
+            // Replace with your actual app download URL
+            window.open('https://your-app-download-url.com', '_blank');
+            hideLimitModal();
+        });
+        
+        closeModalBtn.addEventListener('click', hideLimitModal);
+        
+        // Close modal when clicking outside
+        limitModal.addEventListener('click', (e) => {
+            if (e.target === limitModal) {
+                hideLimitModal();
+            }
+        });
+
+        // Initialize hidden state for outputs
+        titlesOutput.classList.add('hidden');
+        tagsOutput.classList.add('hidden');
+
+        // Focus input on load (avoid on mobile to prevent keyboard popup)
+        if (!/Mobi|Android/i.test(navigator.userAgent)) {
+            promptInput.focus();
+        }
+    </script>
+</body>
+</html>
