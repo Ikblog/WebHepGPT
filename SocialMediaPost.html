@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Post Generator</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 15px;
+            background: linear-gradient(135deg, #4267B2, #898F9C);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo i {
+            font-size: 32px;
+            color: white;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            color: #1a1a1a;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        .platform-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .platform-btn {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 12px;
+            background: white;
+            color: #666;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 180px;
+        }
+
+        .platform-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .platform-btn.active {
+            background: linear-gradient(135deg, #4267B2, #898F9C);
+            color: white;
+        }
+
+        .platform-btn.facebook.active {
+            background: linear-gradient(135deg, #4267B2, #5B7BD5);
+        }
+
+        .platform-btn.instagram.active {
+            background: linear-gradient(135deg, #E1306C, #F77737);
+        }
+
+        .platform-btn.linkedin.active {
+            background: linear-gradient(135deg, #0077B5, #00A0DC);
+        }
+
+        .usage-info {
+            background: white;
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border-left: 4px solid #4267B2;
+        }
+
+        .usage-count {
+            font-weight: 700;
+            color: #4267B2;
+        }
+
+        .input-section {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: inherit;
+            resize: none;
+            outline: none;
+            transition: all 0.2s ease;
+            min-height: 120px;
+            background: #fafafa;
+        }
+
+        .input-field:focus {
+            border-color: #4267B2;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(66, 103, 178, 0.1);
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #4267B2, #5B7BD5);
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(66, 103, 178, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(66, 103, 178, 0.4);
+        }
+
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .suggestion-btn {
+            padding: 12px 18px;
+            border: 1px solid #e5e7eb;
+            border-radius: 50px;
+            background: white;
+            color: #666;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .suggestion-btn:hover {
+            border-color: #4267B2;
+            color: #4267B2;
+            background: #f0f4ff;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 30px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f4f6;
+            border-top: 4px solid #4267B2;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .typing {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 16px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            background: #4267B2;
+            border-radius: 50%;
+            animation: blink 1.2s infinite ease-in-out;
+        }
+
+        .dot:nth-child(1) { animation-delay: 0s; }
+        .dot:nth-child(2) { animation-delay: 0.2s; }
+        .dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes blink {
+            0%, 80%, 100% { opacity: 0.3; transform: translateY(0); }
+            40% { opacity: 1; transform: translateY(-2px); }
+        }
+
+        .generated-post {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            position: relative;
+            animation: slideIn 0.5s ease-out;
+            margin-bottom: 25px;
+            display: none;
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .post-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a1a1a;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .platform-badge {
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: white;
+        }
+
+        .platform-badge.facebook { background: #4267B2; }
+        .platform-badge.instagram { background: #E1306C; }
+        .platform-badge.linkedin { background: #0077B5; }
+
+        .copy-btn {
+            background: #f3f4f6;
+            border: none;
+            border-radius: 10px;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #666;
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            background: #e5e7eb;
+            color: #333;
+        }
+
+        .copy-btn.copied {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .post-content {
+            color: #374151;
+            line-height: 1.6;
+            font-size: 15px;
+            word-break: break-word;
+            white-space: pre-wrap;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+
+        .modal-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #4267B2, #5B7BD5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 32px;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #1a1a1a;
+        }
+
+        .modal-message {
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.6;
+            font-size: 1.05rem;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 140px;
+        }
+
+        .modal-btn.primary {
+            background: linear-gradient(135deg, #4267B2, #5B7BD5);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 12px rgba(66, 103, 178, 0.3);
+        }
+
+        .modal-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(66, 103, 178, 0.4);
+        }
+
+        .modal-btn.secondary {
+            background: #f3f4f6;
+            color: #666;
+            border: 1px solid #e5e7eb;
+        }
+
+        .modal-btn.secondary:hover {
+            background: #e5e7eb;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .platform-selector {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .platform-btn {
+                width: 100%;
+                max-width: 280px;
+            }
+            
+            .input-section {
+                padding: 20px;
+            }
+            
+            .modal-actions {
+                flex-direction: column;
+            }
+            
+            .modal-btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .input-section {
+                padding: 15px;
+            }
+            
+            .generated-post {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-share-alt"></i>
+            </div>
+            <h1>Social Media Post Generator</h1>
+            <p class="subtitle">Create engaging, SEO-optimized posts for all your social platforms</p>
+        </header>
+
+        <div class="platform-selector">
+            <button class="platform-btn facebook active" data-platform="facebook">
+                <i class="fab fa-facebook-f"></i>
+                Facebook Posts
+            </button>
+            <button class="platform-btn instagram" data-platform="instagram">
+                <i class="fab fa-instagram"></i>
+                Instagram Captions
+            </button>
+            <button class="platform-btn linkedin" data-platform="linkedin">
+                <i class="fab fa-linkedin-in"></i>
+                LinkedIn Posts
+            </button>
+        </div>
+
+        <div class="usage-info">
+            <span id="usageText">You have <span class="usage-count" id="usageCount">3</span> uses remaining in the next 5 hours</span>
+        </div>
+
+        <div class="input-section">
+            <div class="input-wrapper">
+                <textarea
+                    id="promptInput"
+                    class="input-field"
+                    placeholder="Describe what you want to post about..."
+                    aria-label="Enter post description"
+                ></textarea>
+            </div>
+            <button id="generateBtn" class="generate-btn">
+                <i class="fas fa-magic"></i>
+                Generate Post
+            </button>
+
+            <div class="suggestions">
+                <button class="suggestion-btn" data-suggestion="Announcing a new product or feature">
+                    New Product Announcement
+                </button>
+                <button class="suggestion-btn" data-suggestion="Sharing company news or updates">
+                    Company News
+                </button>
+                <button class="suggestion-btn" data-suggestion="Promoting a sale or special offer">
+                    Special Offer
+                </button>
+            </div>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <div class="typing">
+                Generating your post
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+        </div>
+
+        <div id="generatedPost" class="generated-post">
+            <div class="post-header">
+                <div class="post-title">
+                    <i class="fas fa-file-alt"></i>
+                    Generated Post
+                    <span class="platform-badge facebook" id="platformBadge">Facebook</span>
+                </div>
+                <button class="copy-btn" aria-label="Copy post">
+                    <i class="fas fa-copy"></i>
+                </button>
+            </div>
+            <div class="post-content" id="postContent"></div>
+        </div>
+    </div>
+
+    <!-- Modal for usage limit reached -->
+    <div class="modal-overlay" id="limitModal">
+        <div class="modal">
+            <div class="modal-icon">
+                <i class="fas fa-mobile-alt"></i>
+            </div>
+            <h2 class="modal-title">Usage Limit Reached</h2>
+            <p class="modal-message">
+                You've used all 3 free posts in the last 5 hours. To continue generating content, please download our mobile app or wait for the limit to reset in <span id="timeRemaining">5 hours</span>.
+            </p>
+            <div class="modal-actions">
+                <button class="modal-btn primary" id="downloadBtn">
+                    <i class="fas fa-download"></i> Download App
+                </button>
+                <button class="modal-btn secondary" id="closeModalBtn">
+                    <i class="fas fa-clock"></i> Wait
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const generateBtn = document.getElementById('generateBtn');
+        const promptInput = document.getElementById('promptInput');
+        const loading = document.getElementById('loading');
+        const generatedPost = document.getElementById('generatedPost');
+        const postContent = document.getElementById('postContent');
+        const platformBadge = document.getElementById('platformBadge');
+        const usageCount = document.getElementById('usageCount');
+        const usageText = document.getElementById('usageText');
+        const limitModal = document.getElementById('limitModal');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const timeRemaining = document.getElementById('timeRemaining');
+        
+        // State variables
+        let selectedPlatform = 'facebook';
+        let isGenerating = false;
+        
+        // Usage tracking
+        const USAGE_LIMIT = 3;
+        const TIME_LIMIT = 5 * 60 * 60 * 1000; // 5 hours in milliseconds
+        
+        // Initialize usage tracking
+        function initUsageTracking() {
+            let usageData = JSON.parse(localStorage.getItem('socialPostGeneratorUsage')) || {
+                count: 0,
+                startTime: null
+            };
+            
+            // Check if time limit has passed
+            if (usageData.startTime && (Date.now() - usageData.startTime) > TIME_LIMIT) {
+                // Reset usage
+                usageData = {
+                    count: 0,
+                    startTime: null
+                };
+                localStorage.setItem('socialPostGeneratorUsage', JSON.stringify(usageData));
+            }
+            
+            return usageData;
+        }
+        
+        // Update usage display
+        function updateUsageDisplay(usageData) {
+            const remaining = USAGE_LIMIT - usageData.count;
+            usageCount.textContent = remaining;
+            
+            if (remaining <= 0) {
+                usageText.textContent = "You've reached your usage limit for the next 5 hours";
+                generateBtn.disabled = true;
+                
+                // Calculate time remaining
+                if (usageData.startTime) {
+                    const endTime = usageData.startTime + TIME_LIMIT;
+                    const timeLeft = endTime - Date.now();
+                    const hoursLeft = Math.ceil(timeLeft / (60 * 60 * 1000));
+                    timeRemaining.textContent = `${hoursLeft} hour${hoursLeft > 1 ? 's' : ''}`;
+                }
+            } else {
+                usageText.textContent = `You have ${remaining} use${remaining > 1 ? 's' : ''} remaining in the next 5 hours`;
+                generateBtn.disabled = false;
+            }
+        }
+        
+        // Record usage
+        function recordUsage() {
+            let usageData = JSON.parse(localStorage.getItem('socialPostGeneratorUsage')) || {
+                count: 0,
+                startTime: null
+            };
+            
+            // If first usage in this period, set start time
+            if (usageData.count === 0) {
+                usageData.startTime = Date.now();
+            }
+            
+            usageData.count++;
+            localStorage.setItem('socialPostGeneratorUsage', JSON.stringify(usageData));
+            
+            return usageData;
+        }
+        
+        // Show limit modal
+        function showLimitModal() {
+            limitModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        // Hide limit modal
+        function hideLimitModal() {
+            limitModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        // Initialize usage tracking on page load
+        let usageData = initUsageTracking();
+        updateUsageDisplay(usageData);
+
+        // Platform selection
+        document.querySelectorAll('.platform-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.platform-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                selectedPlatform = btn.dataset.platform;
+                
+                // Update placeholder text based on platform
+                const placeholderTexts = {
+                    facebook: 'Describe what you want to post about...',
+                    instagram: 'Describe your photo or video for caption ideas...',
+                    linkedin: 'Describe what professional content you want to share...'
+                };
+                
+                promptInput.placeholder = placeholderTexts[selectedPlatform] || 'Describe what you want to post about...';
+            });
+        });
+
+        // Handle suggestions
+        document.querySelectorAll('.suggestion-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                promptInput.value = btn.dataset.suggestion;
+                promptInput.focus();
+            });
+        });
+
+        // Auto-resize textarea
+        promptInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.max(this.scrollHeight, 120) + 'px';
+        });
+
+        // Handle Enter key (with Shift) for new line, without Shift to generate
+        promptInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                generatePost();
+            }
+        });
+
+        // Generate post
+        async function generatePost() {
+            if (isGenerating) return;
+            
+            // Check usage limit
+            if (usageData.count >= USAGE_LIMIT) {
+                showLimitModal();
+                return;
+            }
+            
+            isGenerating = true;
+
+            const topic = promptInput.value.trim();
+            if (!topic) {
+                promptInput.focus();
+                return;
+            }
+
+            loading.style.display = 'block';
+            generatedPost.style.display = 'none';
+            generateBtn.disabled = true;
+
+            // Platform-specific instructions
+            const platformInstructions = {
+                facebook: 'Create a creative, engaging Facebook post that will drive engagement and shares. Include emojis and a call to action.',
+                instagram: 'Create an engaging, SEO-optimized Instagram caption with relevant hashtags and high engagement potential. Include emojis.',
+                linkedin: 'Write a professional, SEO-optimized LinkedIn post to boost authority and engagement. Use a professional tone with relevant hashtags.'
+            };
+
+            const prompt = `Generate a ${selectedPlatform} post about "${topic}". ${platformInstructions[selectedPlatform]} Make it compelling and platform-appropriate.`;
+
+            const timeout = setTimeout(() => {
+                loading.style.display = 'none';
+                generateBtn.disabled = false;
+                displayGeneratedPost('Request timed out. Please try again.');
+                isGenerating = false;
+            }, 15000);
+
+            try {
+                // In a real implementation, you would call your API here
+                // For demonstration, we'll simulate an API call with a timeout
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                // Simulated response based on platform
+                const simulatedResponses = {
+                    facebook: `🌟 Exciting News! 🌟\n\nWe're thrilled to announce our latest ${topic.toLowerCase()}! This is something we've been working on for a while, and we can't wait to share it with you all.\n\n✨ Key Features:\n• Innovative solution for your needs\n• User-friendly interface\n• Available now!\n\nWe'd love to hear your thoughts! Let us know what you think in the comments below. 👇\n\n#NewFeature #Innovation #TechUpdate`,
+                    
+                    instagram: `Exciting things are happening! ✨\n\nWe've just launched our new ${topic.toLowerCase()} and we're so excited to share it with you! This has been a passion project for our team, and we can't wait to see how it helps our community.\n\nWhat do you think? Let us know in the comments! 👇\n\n#NewLaunch #Innovation #Tech #${topic.replace(/\s+/g, '')} #Update #ExcitingNews`,
+                    
+                    linkedin: `I'm excited to share that we've launched our new ${topic.toLowerCase()}!\n\nThis represents a significant step forward in our mission to deliver exceptional value to our clients and partners. The feedback during development has been incredibly positive, and we're confident this will make a real difference.\n\nKey benefits include:\n• Enhanced efficiency and productivity\n• Improved user experience\n• Scalable solutions for growing needs\n\nI'm proud of the team's dedication and innovation in bringing this to life. Looking forward to hearing your thoughts and experiences!\n\n#Innovation #BusinessGrowth #Technology #Leadership #${topic.replace(/\s+/g, '')}`
+                };
+
+                clearTimeout(timeout);
+                
+                // Record usage only on successful generation
+                usageData = recordUsage();
+                updateUsageDisplay(usageData);
+                
+                displayGeneratedPost(simulatedResponses[selectedPlatform]);
+                // Scroll to generated post
+                generatedPost.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } catch (error) {
+                clearTimeout(timeout);
+                console.error('Error:', error);
+                displayGeneratedPost(`Error: ${error.message}. Please try again later.`);
+            } finally {
+                loading.style.display = 'none';
+                generateBtn.disabled = false;
+                isGenerating = false;
+            }
+        }
+
+        // Display generated post
+        function displayGeneratedPost(content) {
+            // Update platform badge
+            platformBadge.textContent = selectedPlatform.charAt(0).toUpperCase() + selectedPlatform.slice(1);
+            platformBadge.className = `platform-badge ${selectedPlatform}`;
+            
+            // Set content
+            postContent.textContent = content;
+            generatedPost.style.display = 'block';
+        }
+
+        // Copy post to clipboard
+        function copyPost(btn) {
+            const postContent = btn.closest('.generated-post').querySelector('.post-content').textContent;
+            
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(postContent).then(() => {
+                    const icon = btn.querySelector('i');
+                    icon.className = 'fas fa-check';
+                    btn.classList.add('copied');
+                    setTimeout(() => {
+                        icon.className = 'fas fa-copy';
+                        btn.classList.remove('copied');
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Clipboard API failed:', err);
+                    fallbackCopy(postContent, btn);
+                });
+            } else {
+                fallbackCopy(postContent, btn);
+            }
+        }
+
+        // Fallback for clipboard copy
+        function fallbackCopy(text, btn) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                const icon = btn.querySelector('i');
+                icon.className = 'fas fa-check';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    icon.className = 'fas fa-copy';
+                    btn.classList.remove('copied');
+                }, 2000);
+            } catch (err) {
+                console.error('Fallback copy failed:', err);
+            }
+            document.body.removeChild(textarea);
+        }
+
+        // Attach generate event
+        generateBtn.addEventListener('click', generatePost);
+
+        // Attach copy event
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.copy-btn')) {
+                copyPost(e.target.closest('.copy-btn'));
+            }
+        });
+
+        // Modal event handlers
+        downloadBtn.addEventListener('click', () => {
+            // Replace with your actual app download URL
+            window.open('https://your-app-download-url.com', '_blank');
+            hideLimitModal();
+        });
+        
+        closeModalBtn.addEventListener('click', hideLimitModal);
+        
+        // Close modal when clicking outside
+        limitModal.addEventListener('click', (e) => {
+            if (e.target === limitModal) {
+                hideLimitModal();
+            }
+        });
+
+        // Focus input on load (avoid on mobile to prevent keyboard popup)
+        if (!/Mobi|Android/i.test(navigator.userAgent)) {
+            promptInput.focus();
+        }
+    </script>
+</body>
+</html>
