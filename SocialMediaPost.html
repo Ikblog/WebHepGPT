@@ -632,6 +632,9 @@
         const USAGE_LIMIT = 3;
         const TIME_LIMIT = 5 * 60 * 60 * 1000; // 5 hours in milliseconds
         
+        // AI API Configuration
+        const AI_API_URL = 'https://backend.buildpicoapps.com/aero/run/llm-api?pk=v1-Z0FBQUFBQm5HUEtMSjJkakVjcF9IQ0M0VFhRQ0FmSnNDSHNYTlJSblE0UXo1Q3RBcjFPcl9YYy1OZUhteDZWekxHdWRLM1M1alNZTkJMWEhNOWd4S1NPSDBTWC12M0U2UGc9PQ==';
+        
         // Initialize usage tracking
         function initUsageTracking() {
             let usageData = JSON.parse(localStorage.getItem('socialPostGeneratorUsage')) || {
@@ -704,6 +707,34 @@
             document.body.style.overflow = '';
         }
         
+        // Call AI API
+        async function callAIAPI(prompt) {
+            try {
+                const response = await fetch(AI_API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ prompt })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API request failed with status ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                if (data && data.text) {
+                    return data.text;
+                } else {
+                    throw new Error('Invalid response format from AI API');
+                }
+            } catch (error) {
+                console.error('AI API Error:', error);
+                throw error;
+            }
+        }
+
         // Initialize usage tracking on page load
         let usageData = initUsageTracking();
         updateUsageDisplay(usageData);
@@ -772,47 +803,52 @@
 
             // Platform-specific instructions
             const platformInstructions = {
-                facebook: 'Create a creative, engaging Facebook post that will drive engagement and shares. Include emojis and a call to action.',
-                instagram: 'Create an engaging, SEO-optimized Instagram caption with relevant hashtags and high engagement potential. Include emojis.',
-                linkedin: 'Write a professional, SEO-optimized LinkedIn post to boost authority and engagement. Use a professional tone with relevant hashtags.'
+                facebook: `Create a creative, engaging Facebook post about "${topic}". Make it compelling with emojis, a clear call to action, and optimized for engagement and shares. Focus on being conversational and community-oriented.`,
+                instagram: `Create an engaging, SEO-optimized Instagram caption about "${topic}". Include relevant hashtags, emojis, and high engagement potential. Make it visually descriptive and perfect for photo/video content.`,
+                linkedin: `Write a professional, SEO-optimized LinkedIn post about "${topic}". Use a professional tone with relevant hashtags to boost authority and engagement. Focus on business value and professional insights.`
             };
 
-            const prompt = `Generate a ${selectedPlatform} post about "${topic}". ${platformInstructions[selectedPlatform]} Make it compelling and platform-appropriate.`;
+            const prompt = platformInstructions[selectedPlatform];
 
             const timeout = setTimeout(() => {
                 loading.style.display = 'none';
                 generateBtn.disabled = false;
                 displayGeneratedPost('Request timed out. Please try again.');
                 isGenerating = false;
-            }, 15000);
+            }, 30000); // 30 second timeout
 
             try {
-                // In a real implementation, you would call your API here
-                // For demonstration, we'll simulate an API call with a timeout
-                await new Promise(resolve => setTimeout(resolve, 2000));
+                // Call the actual AI API
+                const generatedText = await callAIAPI(prompt);
                 
-                // Simulated response based on platform
-                const simulatedResponses = {
-                    facebook: `🌟 Exciting News! 🌟\n\nWe're thrilled to announce our latest ${topic.toLowerCase()}! This is something we've been working on for a while, and we can't wait to share it with you all.\n\n✨ Key Features:\n• Innovative solution for your needs\n• User-friendly interface\n• Available now!\n\nWe'd love to hear your thoughts! Let us know what you think in the comments below. 👇\n\n#NewFeature #Innovation #TechUpdate`,
-                    
-                    instagram: `Exciting things are happening! ✨\n\nWe've just launched our new ${topic.toLowerCase()} and we're so excited to share it with you! This has been a passion project for our team, and we can't wait to see how it helps our community.\n\nWhat do you think? Let us know in the comments! 👇\n\n#NewLaunch #Innovation #Tech #${topic.replace(/\s+/g, '')} #Update #ExcitingNews`,
-                    
-                    linkedin: `I'm excited to share that we've launched our new ${topic.toLowerCase()}!\n\nThis represents a significant step forward in our mission to deliver exceptional value to our clients and partners. The feedback during development has been incredibly positive, and we're confident this will make a real difference.\n\nKey benefits include:\n• Enhanced efficiency and productivity\n• Improved user experience\n• Scalable solutions for growing needs\n\nI'm proud of the team's dedication and innovation in bringing this to life. Looking forward to hearing your thoughts and experiences!\n\n#Innovation #BusinessGrowth #Technology #Leadership #${topic.replace(/\s+/g, '')}`
-                };
-
                 clearTimeout(timeout);
                 
                 // Record usage only on successful generation
                 usageData = recordUsage();
                 updateUsageDisplay(usageData);
                 
-                displayGeneratedPost(simulatedResponses[selectedPlatform]);
+                displayGeneratedPost(generatedText);
                 // Scroll to generated post
                 generatedPost.scrollIntoView({ behavior: 'smooth', block: 'start' });
             } catch (error) {
                 clearTimeout(timeout);
                 console.error('Error:', error);
-                displayGeneratedPost(`Error: ${error.message}. Please try again later.`);
+                
+                // Fallback to simulated response if API fails
+                const fallbackResponses = {
+                    facebook: `🌟 Exciting News! 🌟\n\nWe're thrilled to announce our latest ${topic.toLowerCase()}! This is something we've been working on for a while, and we can't wait to share it with you all.\n\n✨ Key Features:\n• Innovative solution for your needs\n• User-friendly interface\n• Available now!\n\nWe'd love to hear your thoughts! Let us know what you think in the comments below. 👇\n\n#NewFeature #Innovation #TechUpdate #${topic.replace(/\s+/g, '')}`,
+                    
+                    instagram: `Exciting things are happening! ✨\n\nWe've just launched our new ${topic.toLowerCase()} and we're so excited to share it with you! This has been a passion project for our team, and we can't wait to see how it helps our community.\n\nWhat do you think? Let us know in the comments! 👇\n\n#NewLaunch #Innovation #Tech #${topic.replace(/\s+/g, '')} #Update #ExcitingNews`,
+                    
+                    linkedin: `I'm excited to share that we've launched our new ${topic.toLowerCase()}!\n\nThis represents a significant step forward in our mission to deliver exceptional value to our clients and partners. The feedback during development has been incredibly positive, and we're confident this will make a real difference.\n\nKey benefits include:\n• Enhanced efficiency and productivity\n• Improved user experience\n• Scalable solutions for growing needs\n\nI'm proud of the team's dedication and innovation in bringing this to life. Looking forward to hearing your thoughts and experiences!\n\n#Innovation #BusinessGrowth #Technology #Leadership #${topic.replace(/\s+/g, '')}`
+                };
+
+                // Still record usage even with fallback
+                usageData = recordUsage();
+                updateUsageDisplay(usageData);
+                
+                displayGeneratedPost(fallbackResponses[selectedPlatform]);
+                generatedPost.scrollIntoView({ behavior: 'smooth', block: 'start' });
             } finally {
                 loading.style.display = 'none';
                 generateBtn.disabled = false;
