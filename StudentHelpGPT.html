@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes">
+    <title>AI Student Help</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #fafafa;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 16px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 16px;
+            background: linear-gradient(135deg, #4361ee, #3a0ca3);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo::before {
+            content: '🧠';
+            position: absolute;
+            font-size: 24px;
+            animation: pulse 2s infinite;
+            will-change: transform;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .logo::before {
+                animation: none;
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .hero-title {
+            font-size: clamp(2rem, 4.5vw, 2.5rem);
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: #1a1a1a;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-title .highlight {
+            background: linear-gradient(135deg, #4361ee, #3a0ca3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: #4361ee;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 3vw, 1.1rem);
+            color: #666;
+            margin-bottom: 24px;
+            font-weight: 400;
+        }
+
+        .usage-info {
+            background: #f0f7ff;
+            border: 1px solid #d0e3ff;
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            color: #1a56db;
+        }
+
+        .usage-count {
+            font-weight: 700;
+            color: #4361ee;
+        }
+
+        .input-section {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            margin-bottom: 24px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .education-levels {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .level-btn {
+            padding: 12px 24px;
+            border: 2px solid #e5e7eb;
+            border-radius: 50px;
+            background: white;
+            color: #666;
+            cursor: pointer;
+            font-size: clamp(12px, 2.5vw, 13px);
+            font-weight: 600;
+            transition: all 0.2s ease;
+            min-width: 90px;
+            min-height: 44px;
+            touch-action: manipulation;
+        }
+
+        .level-btn:hover,
+        .level-btn:focus {
+            border-color: #4361ee;
+            color: #4361ee;
+            outline: none;
+        }
+
+        .level-btn.active {
+            background: linear-gradient(135deg, #4361ee, #3a0ca3);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+        }
+
+        .input-wrapper {
+            position: relative;
+            margin-bottom: 16px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 16px 56px 16px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: clamp(14px, 2.5vw, 15px);
+            font-family: inherit;
+            resize: none;
+            outline: none;
+            transition: all 0.2s ease;
+            min-height: 100px;
+            background: #fafafa;
+            overflow-y: auto;
+        }
+
+        .input-field:focus {
+            border-color: #4361ee;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+
+        .input-field::placeholder {
+            color: #9ca3af;
+        }
+
+        .send-btn {
+            position: absolute;
+            right: 8px;
+            bottom: 8px;
+            width: 48px;
+            height: 48px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #4361ee, #3a0ca3);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+            touch-action: manipulation;
+        }
+
+        .send-btn:hover,
+        .send-btn:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(67, 97, 238, 0.4);
+            outline: none;
+        }
+
+        .send-btn:active {
+            transform: translateY(0);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .suggestion-btn {
+            padding: 12px 20px;
+            border: 1px solid #e5e7eb;
+            border-radius: 50px;
+            background: white;
+            color: #666;
+            cursor: pointer;
+            font-size: clamp(12px, 2.5vw, 13px);
+            transition: all 0.2s ease;
+            min-width: 100%;
+            max-width: 280px;
+            min-height: 44px;
+            text-align: center;
+            touch-action: manipulation;
+        }
+
+        .suggestion-btn:hover,
+        .suggestion-btn:focus {
+            border-color: #4361ee;
+            color: #4361ee;
+            background: #f0f4ff;
+            outline: none;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 24px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e5e7eb;
+            margin-bottom: 16px;
+        }
+
+        .spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid #f3f4f6;
+            border-top: 3px solid #4361ee;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 12px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .typing {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: clamp(14px, 2.5vw, 15px);
+            color: #666;
+            font-weight: 500;
+        }
+
+        .dot {
+            width: 5px;
+            height: 5px;
+            background: #4361ee;
+            border-radius: 50%;
+            animation: blink 1.2s infinite ease-in-out;
+        }
+
+        .dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes blink {
+            0%, 80%, 100% {
+                opacity: 0.3;
+                transform: translateY(0);
+            }
+            40% {
+                opacity: 1;
+                transform: translateY(-2px);
+            }
+        }
+
+        .generated-solution {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e5e7eb;
+            position: relative;
+            animation: slideIn 0.5s ease-out;
+            margin-bottom: 16px;
+        }
+
+        .solution-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .solution-title {
+            font-size: clamp(16px, 3vw, 18px);
+            font-weight: 700;
+            color: #1a1a1a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .level-badge {
+            padding: 4px 10px;
+            border-radius: 16px;
+            font-size: clamp(10px, 2vw, 11px);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .level-badge.primary {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .level-badge.secondary {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .level-badge.university {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .copy-btn {
+            background: #f3f4f6;
+            border: none;
+            border-radius: 10px;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #666;
+            transition: all 0.2s ease;
+            touch-action: manipulation;
+        }
+
+        .copy-btn:hover,
+        .copy-btn:focus {
+            background: #e5e7eb;
+            color: #333;
+            outline: none;
+        }
+
+        .copy-btn.copied {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .solution-content {
+            color: #374151;
+            line-height: 1.6;
+            font-size: clamp(13px, 2.5vw, 14px);
+            word-break: break-word;
+        }
+
+        .solution-content .math-formula {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            margin: 8px 0;
+            display: inline-block;
+        }
+
+        .solution-content .step {
+            margin-bottom: 16px;
+            padding-left: 16px;
+            border-left: 3px solid #e5e7eb;
+        }
+
+        .solution-content .step-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #4361ee;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+
+        .modal-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #4361ee, #3a0ca3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 28px;
+        }
+
+        .modal-title {
+            font-size: clamp(1.5rem, 4vw, 1.8rem);
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #1a1a1a;
+        }
+
+        .modal-message {
+            color: #666;
+            margin-bottom: 24px;
+            line-height: 1.6;
+            font-size: clamp(0.95rem, 2.5vw, 1.05rem);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .modal-btn {
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 140px;
+            min-height: 48px;
+            touch-action: manipulation;
+        }
+
+        .modal-btn.primary {
+            background: linear-gradient(135deg, #4361ee, #3a0ca3);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+        }
+
+        .modal-btn.primary:hover,
+        .modal-btn.primary:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(67, 97, 238, 0.4);
+            outline: none;
+        }
+
+        .modal-btn.secondary {
+            background: #f3f4f6;
+            color: #666;
+            border: 1px solid #e5e7eb;
+        }
+
+        .modal-btn.secondary:hover,
+        .modal-btn.secondary:focus {
+            background: #e5e7eb;
+            outline: none;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 24px 12px;
+            }
+
+            .input-section {
+                padding: 16px;
+            }
+
+            .suggestions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .modal {
+                padding: 24px;
+            }
+
+            .modal-actions {
+                flex-direction: column;
+            }
+
+            .modal-btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .hero-title {
+                font-size: clamp(1.8rem, 4vw, 2rem);
+            }
+
+            .hero-subtitle {
+                font-size: clamp(0.9rem, 2.5vw, 1rem);
+            }
+
+            .input-section {
+                padding: 12px;
+            }
+
+            .input-field {
+                padding: 12px 48px 12px 12px;
+                min-height: 80px;
+            }
+
+            .send-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+
+            .level-btn {
+                padding: 10px 20px;
+                min-width: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <div class="hero-section">
+            <div class="logo"></div>
+            <h1 class="hero-title">AI <span class="highlight">Student Help</span></h1>
+            <p class="hero-subtitle">Get step-by-step solutions for primary, secondary, and university courses</p>
+        </div>
+
+        <div class="usage-info">
+            <span id="usageText">You have <span class="usage-count" id="usageCount">3</span> questions remaining in the next 5 hours</span>
+        </div>
+
+        <div class="input-section">
+            <div class="education-levels">
+                <button class="level-btn active" data-level="primary" aria-label="Primary level">Primary</button>
+                <button class="level-btn" data-level="secondary" aria-label="Secondary level">Secondary</button>
+                <button class="level-btn" data-level="university" aria-label="University level">University</button>
+            </div>
+
+            <div class="input-wrapper">
+                <textarea
+                    id="problemInput"
+                    class="input-field"
+                    placeholder="Enter your question or problem..."
+                    aria-label="Enter your question or problem"
+                ></textarea>
+                <button id="solveBtn" class="send-btn" aria-label="Solve Problem">
+                    <i class="fas fa-graduation-cap"></i>
+                </button>
+            </div>
+
+            <div class="suggestions">
+                <button class="suggestion-btn" data-suggestion="Solve 2x + 5 = 15" aria-label="Solve algebra problem">
+                    Solve 2x + 5 = 15
+                </button>
+                <button class="suggestion-btn" data-suggestion="Explain photosynthesis in simple terms" aria-label="Explain photosynthesis">
+                    Explain photosynthesis in simple terms
+                </button>
+                <button class="suggestion-btn" data-suggestion="What is Newton's second law of motion?" aria-label="Explain Newton's second law">
+                    What is Newton's second law of motion?
+                </button>
+            </div>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <div class="typing">
+                Solving your problem
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+        </div>
+
+        <div id="generatedSolution" class="hidden"></div>
+    </main>
+
+    <!-- Modal for usage limit reached -->
+    <div class="modal-overlay" id="limitModal">
+        <div class="modal">
+            <div class="modal-icon">
+                <i class="fas fa-mobile-alt"></i>
+            </div>
+            <h2 class="modal-title">Usage Limit Reached</h2>
+            <p class="modal-message">
+                You've used all 3 free questions in the last 5 hours. To continue getting help, please download our mobile app or wait for the limit to reset in <span id="timeRemaining">5 hours</span>.
+            </p>
+            <div class="modal-actions">
+                <button class="modal-btn primary" id="downloadBtn">
+                    <i class="fas fa-download"></i> Download App
+                </button>
+                <button class="modal-btn secondary" id="closeModalBtn">
+                    <i class="fas fa-clock"></i> Wait
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const solveBtn = document.getElementById('solveBtn');
+        const problemInput = document.getElementById('problemInput');
+        const loading = document.getElementById('loading');
+        const generatedSolution = document.getElementById('generatedSolution');
+        const usageCount = document.getElementById('usageCount');
+        const usageText = document.getElementById('usageText');
+        const limitModal = document.getElementById('limitModal');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const timeRemaining = document.getElementById('timeRemaining');
+        
+        let selectedLevel = 'primary';
+        let isSolving = false;
+        
+        // Usage tracking
+        const USAGE_LIMIT = 3;
+        const TIME_LIMIT = 5 * 60 * 60 * 1000; // 5 hours in milliseconds
+        
+        // Initialize usage tracking
+        function initUsageTracking() {
+            let usageData = JSON.parse(localStorage.getItem('studentHelpUsage')) || {
+                count: 0,
+                startTime: null
+            };
+            
+            // Check if time limit has passed
+            if (usageData.startTime && (Date.now() - usageData.startTime) > TIME_LIMIT) {
+                // Reset usage
+                usageData = {
+                    count: 0,
+                    startTime: null
+                };
+                localStorage.setItem('studentHelpUsage', JSON.stringify(usageData));
+            }
+            
+            return usageData;
+        }
+        
+        // Update usage display
+        function updateUsageDisplay(usageData) {
+            const remaining = USAGE_LIMIT - usageData.count;
+            usageCount.textContent = remaining;
+            
+            if (remaining <= 0) {
+                usageText.textContent = "You've reached your usage limit for the next 5 hours";
+                solveBtn.disabled = true;
+                
+                // Calculate time remaining
+                if (usageData.startTime) {
+                    const endTime = usageData.startTime + TIME_LIMIT;
+                    const timeLeft = endTime - Date.now();
+                    const hoursLeft = Math.ceil(timeLeft / (60 * 60 * 1000));
+                    timeRemaining.textContent = `${hoursLeft} hour${hoursLeft > 1 ? 's' : ''}`;
+                }
+            } else {
+                usageText.textContent = `You have ${remaining} question${remaining > 1 ? 's' : ''} remaining in the next 5 hours`;
+                solveBtn.disabled = false;
+            }
+        }
+        
+        // Record usage
+        function recordUsage() {
+            let usageData = JSON.parse(localStorage.getItem('studentHelpUsage')) || {
+                count: 0,
+                startTime: null
+            };
+            
+            // If first usage in this period, set start time
+            if (usageData.count === 0) {
+                usageData.startTime = Date.now();
+            }
+            
+            usageData.count++;
+            localStorage.setItem('studentHelpUsage', JSON.stringify(usageData));
+            
+            return usageData;
+        }
+        
+        // Show limit modal
+        function showLimitModal() {
+            limitModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        // Hide limit modal
+        function hideLimitModal() {
+            limitModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        // Initialize usage tracking on page load
+        let usageData = initUsageTracking();
+        updateUsageDisplay(usageData);
+
+        // Debounce function for touch events
+        function debounce(func, wait) {
+            let timeout;
+            return function (...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
+
+        // Handle level toggle
+        document.querySelectorAll('.level-btn').forEach(btn => {
+            const handler = () => {
+                document.querySelectorAll('.level-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                selectedLevel = btn.dataset.level;
+                
+                // Update suggestions based on level
+                updateSuggestions();
+            };
+            btn.addEventListener('click', handler);
+            btn.addEventListener('touchstart', debounce(handler, 200), { passive: true });
+        });
+
+        // Update suggestions based on selected level
+        function updateSuggestions() {
+            const suggestions = document.querySelectorAll('.suggestion-btn');
+            
+            if (selectedLevel === 'primary') {
+                suggestions[0].textContent = 'Solve 2x + 5 = 15';
+                suggestions[1].textContent = 'Explain photosynthesis in simple terms';
+                suggestions[2].textContent = 'What is Newton\'s second law of motion?';
+            } else if (selectedLevel === 'secondary') {
+                suggestions[0].textContent = 'Solve the quadratic equation x² - 5x + 6 = 0';
+                suggestions[1].textContent = 'Explain the process of cellular respiration';
+                suggestions[2].textContent = 'What are the main causes of World War I?';
+            } else if (selectedLevel === 'university') {
+                suggestions[0].textContent = 'Explain the concept of derivatives in calculus';
+                suggestions[1].textContent = 'Describe the process of protein synthesis';
+                suggestions[2].textContent = 'Analyze the impact of monetary policy on inflation';
+            }
+        }
+
+        // Handle suggestions
+        document.querySelectorAll('.suggestion-btn').forEach(btn => {
+            const handler = () => {
+                problemInput.value = btn.textContent;
+                problemInput.focus();
+                solveProblem();
+            };
+            btn.addEventListener('click', handler);
+            btn.addEventListener('touchstart', debounce(handler, 200), { passive: true });
+        });
+
+        // Auto-resize textarea and save to localStorage
+        problemInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.max(this.scrollHeight, 80) + 'px';
+            localStorage.setItem('lastProblem', this.value);
+        });
+
+        // Load saved input
+        problemInput.value = localStorage.getItem('lastProblem') || '';
+
+        // Handle Enter key (without Shift) to solve
+        problemInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                solveProblem();
+            }
+        });
+
+        // Solve problem
+        async function solveProblem() {
+            if (isSolving) return;
+            
+            // Check usage limit
+            if (usageData.count >= USAGE_LIMIT) {
+                showLimitModal();
+                return;
+            }
+            
+            isSolving = true;
+
+            const problem = problemInput.value.trim();
+            if (!problem) {
+                problemInput.focus();
+                displayGeneratedSolution('Please enter a problem to solve.');
+                isSolving = false;
+                return;
+            }
+
+            loading.classList.remove('hidden');
+            generatedSolution.classList.add('hidden');
+            solveBtn.disabled = true;
+
+            // Create level-specific instructions
+            let levelInstructions = '';
+            if (selectedLevel === 'primary') {
+                levelInstructions = 'Explain in simple, easy-to-understand terms suitable for elementary school students. Use examples and analogies.';
+            } else if (selectedLevel === 'secondary') {
+                levelInstructions = 'Provide a detailed explanation suitable for high school students. Include step-by-step reasoning where applicable.';
+            } else if (selectedLevel === 'university') {
+                levelInstructions = 'Provide an in-depth, comprehensive explanation suitable for university-level students. Include relevant theories, formulas, and advanced concepts.';
+            }
+
+            const prompt = `As an educational assistant, solve this ${selectedLevel} level problem: "${problem}". ${levelInstructions} Provide a clear, step-by-step solution with explanations. Format your response with clear headings and bullet points where appropriate.`;
+
+            const timeout = setTimeout(() => {
+                loading.classList.add('hidden');
+                solveBtn.disabled = false;
+                displayGeneratedSolution('Request timed out. Please try again.');
+                isSolving = false;
+            }, 10000);
+
+            try {
+                const response = await fetch('https://backend.buildpicoapps.com/aero/run/llm-api?pk=v1-Z0FBQUFBQm5HUEtMSjJkakVjcF9IQ0M0VFhRQ0FmSnNDSHNYTlJSblE0UXo1Q3RBcjFPcl9YYy1OZUhteDZWekxHdWRLM1M1alNZTkJMWEhNOWd4S1NPSDBTWC12M0U2UGc9PQ==', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt })
+                });
+
+                clearTimeout(timeout);
+
+                if (!response.ok) {
+                    throw new Error(`API request failed with status ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    // Record usage only on successful generation
+                    usageData = recordUsage();
+                    updateUsageDisplay(usageData);
+                    
+                    displayGeneratedSolution(data.text);
+                    // Scroll to generated solution
+                    generatedSolution.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } else {
+                    throw new Error(data.error || 'Solution generation failed');
+                }
+            } catch (error) {
+                clearTimeout(timeout);
+                console.error('Error:', error);
+                displayGeneratedSolution(`Error: ${error.message}. Please try again later.`);
+            } finally {
+                loading.classList.add('hidden');
+                solveBtn.disabled = false;
+                isSolving = false;
+            }
+        }
+
+        // Display generated solution
+        function displayGeneratedSolution(content) {
+            const badgeClass = selectedLevel;
+            const badgeText = selectedLevel.charAt(0).toUpperCase() + selectedLevel.slice(1);
+            
+            const solutionHTML = `
+                <div class="generated-solution">
+                    <div class="solution-header">
+                        <div class="solution-title">
+                            <i class="fas fa-lightbulb"></i>
+                            Solution
+                            <span class="level-badge ${badgeClass}">${badgeText}</span>
+                        </div>
+                        <button class="copy-btn" aria-label="Copy solution">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                    <div class="solution-content">${formatSolution(content)}</div>
+                </div>
+            `;
+            
+            generatedSolution.innerHTML = solutionHTML;
+            generatedSolution.classList.remove('hidden');
+        }
+
+        // Format solution content
+        function formatSolution(content) {
+            // Convert markdown-like formatting to HTML
+            let formatted = content
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/\n\n/g, '</p><p>')
+                .replace(/\n/g, '<br>');
+            
+            // Add step formatting if content contains numbered steps
+            if (formatted.match(/\d+\./)) {
+                formatted = formatted.replace(/(\d+)\.\s+(.*?)(?=\d+\.|$)/g, '<div class="step"><div class="step-title">Step $1</div>$2</div>');
+            }
+            
+            // Add math formula formatting
+            formatted = formatted.replace(/(\$\$.*?\$\$|\$.*?\$)/g, '<span class="math-formula">$1</span>');
+            
+            return `<p>${formatted}</p>`;
+        }
+
+        // Copy solution to clipboard
+        function copySolution(btn) {
+            const solutionContent = btn.closest('.generated-solution').querySelector('.solution-content').textContent;
+            
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(solutionContent).then(() => {
+                    const icon = btn.querySelector('i');
+                    icon.className = 'fas fa-check';
+                    btn.classList.add('copied');
+                    setTimeout(() => {
+                        icon.className = 'fas fa-copy';
+                        btn.classList.remove('copied');
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Clipboard API failed:', err);
+                    fallbackCopy(solutionContent, btn);
+                });
+            } else {
+                fallbackCopy(solutionContent, btn);
+            }
+        }
+
+        // Fallback for clipboard copy
+        function fallbackCopy(text, btn) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                const icon = btn.querySelector('i');
+                icon.className = 'fas fa-check';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    icon.className = 'fas fa-copy';
+                    btn.classList.remove('copied');
+                }, 2000);
+            } catch (err) {
+                console.error('Fallback copy failed:', err);
+            }
+            document.body.removeChild(textarea);
+        }
+
+        // Attach solve event
+        const solveHandler = debounce(solveProblem, 200);
+        solveBtn.addEventListener('click', solveHandler);
+        solveBtn.addEventListener('touchstart', solveHandler, { passive: true });
+
+        // Attach copy event
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.copy-btn')) {
+                copySolution(e.target.closest('.copy-btn'));
+            }
+        });
+        document.addEventListener('touchstart', (e) => {
+            if (e.target.closest('.copy-btn')) {
+                debounce(() => copySolution(e.target.closest('.copy-btn')), 200)();
+            }
+        }, { passive: true });
+
+        // Modal event handlers
+        downloadBtn.addEventListener('click', () => {
+            // Replace with your actual app download URL
+            window.open('https://www.appcreator24.com/app3655518-90zkne', '_blank');
+            hideLimitModal();
+        });
+        
+        closeModalBtn.addEventListener('click', hideLimitModal);
+        
+        // Close modal when clicking outside
+        limitModal.addEventListener('click', (e) => {
+            if (e.target === limitModal) {
+                hideLimitModal();
+            }
+        });
+
+        // Focus input on load (avoid on mobile to prevent keyboard popup)
+        if (!/Mobi|Android/i.test(navigator.userAgent)) {
+            problemInput.focus();
+        }
+    </script>
+</body>
+</html>
