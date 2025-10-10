@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes">
     <title>Prompt Generator</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+        crossorigin="anonymous">
     <link rel="icon" type="image/png" href="/favicon.png">
     <style>
         * {
@@ -22,7 +24,8 @@
             flex-direction: column;
             color: #333;
             line-height: 1.6;
-            overflow-x: hidden; /* Prevent horizontal scrolling */
+            overflow-x: hidden;
+            /* Prevent horizontal scrolling */
             padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
         }
 
@@ -67,7 +70,8 @@
 
         @media (prefers-reduced-motion: reduce) {
             .logo::before {
-                animation: none; /* Disable animation for accessibility */
+                animation: none;
+                /* Disable animation for accessibility */
             }
         }
 
@@ -148,7 +152,8 @@
             font-weight: 600;
             transition: all 0.2s ease;
             min-width: 90px;
-            min-height: 44px; /* Touch-friendly */
+            min-height: 44px;
+            /* Touch-friendly */
             touch-action: manipulation;
         }
 
@@ -325,7 +330,10 @@
         }
 
         @keyframes blink {
-            0%, 80%, 100% {
+
+            0%,
+            80%,
+            100% {
                 opacity: 0.3;
                 transform: translateY(0);
             }
@@ -615,6 +623,7 @@
         }
     </style>
 </head>
+
 <body>
     <main class="container">
         <div class="hero-section">
@@ -624,7 +633,23 @@
         </div>
 
         <div class="usage-info">
-            <span id="usageText">You have <span class="usage-count" id="usageCount">3</span> uses remaining in the next 5 hours</span>
+            <span id="usageText">You have <span class="usage-count" id="usageCount">3</span> uses remaining in the next
+            5 hours</span>
+        </div>
+
+        <div style="text-align:center; margin:20px 0;">
+            <script type="text/javascript">
+                atOptions = {
+        'key': 'f9b2d6ac0a3e18f7d2bf5638366d60d9',
+        'format': 'iframe',
+        'height': 50,
+        'width': 500,
+        'params': {}
+      };
+            </script>
+            <script type="text/javascript"
+                src="//www.highperformanceformat.com/f9b2d6ac0a3e18f7d2bf5638366d60d9/invoke.js">
+            </script>
         </div>
 
         <div class="input-section">
@@ -657,6 +682,20 @@
                 </button>
             </div>
         </div>
+        <div style="text-align:center; margin:20px 0;">
+            <script type="text/javascript">
+                atOptions = {
+                'key': 'f9b2d6ac0a3e18f7d2bf5638366d60d9',
+                'format': 'iframe',
+                'height': 50,
+                'width': 500,
+                'params': {}
+              };
+            </script>
+            <script type="text/javascript"
+                src="//www.highperformanceformat.com/f9b2d6ac0a3e18f7d2bf5638366d60d9/invoke.js">
+            </script>
+        </div>
 
         <div class="loading" id="loading">
             <div class="spinner"></div>
@@ -679,9 +718,11 @@
             </div>
             <h2 class="modal-title">Usage Limit Reached</h2>
             <p class="modal-message">
-                You've used all 3 free prompts in the last 5 hours. To continue generating prompts, please download our mobile app or wait for the limit to reset in <span id="timeRemaining">5 hours</span>.
+                You've used all 3 free prompts in the last 5 hours. To continue generating prompts, please download our
+                mobile app or wait for the limit to reset in <span id="timeRemaining">5 hours</span>.
             </p>
-              <div class="modal-actions"> <button class="modal-btn primary" id="downloadBtn"> <i class="fas fa-download"></i> Download App </button>
+            <div class="modal-actions">
+                <button class="modal-btn primary" id="downloadBtn"> <i class="fas fa-download"></i> Download App </button>
                 <button class="modal-btn secondary" id="closeModalBtn">
                     <i class="fas fa-clock"></i> Wait
                 </button>
@@ -1028,4 +1069,5 @@
         }
     </script>
 </body>
+
 </html>
