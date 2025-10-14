@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes">
+    <title>Storyteller AI</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #fff;
+            line-height: 1.6;
+            overflow-x: hidden;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 16px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .logo {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 16px;
+            background: linear-gradient(135deg, #e94560, #f39c12);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(233, 69, 96, 0.3);
+        }
+
+        .logo::before {
+            content: '📖';
+            font-size: 28px;
+            position: absolute;
+            animation: float 3s ease-in-out infinite;
+            will-change: transform;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .logo::before {
+                animation: none;
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .hero-title {
+            font-size: clamp(2.2rem, 4.5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: #fff;
+            letter-spacing: -0.02em;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-title .highlight {
+            background: linear-gradient(135deg, #e94560, #f39c12);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: #e94560;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 24px;
+            font-weight: 400;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .input-section {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            margin-bottom: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .genre-toggles {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .toggle-btn {
+            padding: 12px 24px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+            font-size: clamp(12px, 2.5vw, 13px);
+            font-weight: 600;
+            transition: all 0.3s ease;
+            min-width: 90px;
+            min-height: 44px;
+            touch-action: manipulation;
+        }
+
+        .toggle-btn:hover,
+        .toggle-btn:focus {
+            border-color: #e94560;
+            color: #fff;
+            background: rgba(233, 69, 96, 0.2);
+            outline: none;
+        }
+
+        .toggle-btn.active {
+            background: linear-gradient(135deg, #e94560, #f39c12);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 16px rgba(233, 69, 96, 0.4);
+        }
+
+        .input-wrapper {
+            position: relative;
+            margin-bottom: 16px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 16px 56px 16px 16px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            font-size: clamp(14px, 2.5vw, 15px);
+            font-family: inherit;
+            resize: none;
+            outline: none;
+            transition: all 0.3s ease;
+            min-height: 120px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            overflow-y: auto;
+        }
+
+        .input-field:focus {
+            border-color: #e94560;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.2);
+        }
+
+        .input-field::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .send-btn {
+            position: absolute;
+            right: 8px;
+            bottom: 8px;
+            width: 48px;
+            height: 48px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #e94560, #f39c12);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(233, 69, 96, 0.4);
+            touch-action: manipulation;
+        }
+
+        .send-btn:hover,
+        .send-btn:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(233, 69, 96, 0.6);
+            outline: none;
+        }
+
+        .send-btn:active {
+            transform: translateY(0);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .suggestion-btn {
+            padding: 12px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+            font-size: clamp(12px, 2.5vw, 13px);
+            transition: all 0.3s ease;
+            min-width: 100%;
+            max-width: 280px;
+            min-height: 44px;
+            text-align: center;
+            touch-action: manipulation;
+        }
+
+        .suggestion-btn:hover,
+        .suggestion-btn:focus {
+            border-color: #e94560;
+            color: #fff;
+            background: rgba(233, 69, 96, 0.2);
+            outline: none;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 24px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 16px;
+        }
+
+        .spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid #e94560;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 12px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .typing {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: clamp(14px, 2.5vw, 15px);
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+        }
+
+        .dot {
+            width: 5px;
+            height: 5px;
+            background: #e94560;
+            border-radius: 50%;
+            animation: blink 1.2s infinite ease-in-out;
+        }
+
+        .dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes blink {
+            0%, 80%, 100% {
+                opacity: 0.3;
+                transform: translateY(0);
+            }
+            40% {
+                opacity: 1;
+                transform: translateY(-2px);
+            }
+        }
+
+        .generated-story {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            animation: slideIn 0.5s ease-out;
+            margin-bottom: 16px;
+        }
+
+        .story-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .story-title {
+            font-size: clamp(16px, 3vw, 18px);
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .genre-badge {
+            padding: 4px 10px;
+            border-radius: 16px;
+            font-size: clamp(10px, 2vw, 11px);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: rgba(233, 69, 96, 0.3);
+            color: #fff;
+        }
+
+        .copy-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 10px;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+            touch-action: manipulation;
+        }
+
+        .copy-btn:hover,
+        .copy-btn:focus {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            outline: none;
+        }
+
+        .copy-btn.copied {
+            background: rgba(46, 204, 113, 0.3);
+            color: #2ecc71;
+        }
+
+        .story-content {
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.7;
+            font-size: clamp(14px, 2.5vw, 15px);
+            word-break: break-word;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        .story-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .story-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .story-content::-webkit-scrollbar-thumb {
+            background: rgba(233, 69, 96, 0.5);
+            border-radius: 10px;
+        }
+
+        .story-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(233, 69, 96, 0.7);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle 5s infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%, 100% {
+                opacity: 0.2;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 24px 12px;
+            }
+
+            .input-section {
+                padding: 16px;
+            }
+
+            .suggestions {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .hero-title {
+                font-size: clamp(1.8rem, 4vw, 2rem);
+            }
+
+            .hero-subtitle {
+                font-size: clamp(0.9rem, 2.5vw, 1rem);
+            }
+
+            .input-section {
+                padding: 12px;
+            }
+
+            .input-field {
+                padding: 12px 48px 12px 12px;
+                min-height: 100px;
+            }
+
+            .send-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+
+            .toggle-btn {
+                padding: 10px 20px;
+                min-width: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    
+    <main class="container">
+        <div class="hero-section">
+            <div class="logo"></div>
+            <h1 class="hero-title">Storyteller <span class="highlight">AI</span></h1>
+            <p class="hero-subtitle">Let our AI weave captivating tales from your imagination. Just provide a theme, character, or setting, and watch the magic unfold.</p>
+        </div>
+
+        <div class="input-section">
+            <div class="genre-toggles">
+                <button class="toggle-btn active" data-genre="fantasy" aria-label="Select Fantasy genre">Fantasy</button>
+                <button class="toggle-btn" data-genre="sci-fi" aria-label="Select Sci-Fi genre">Sci-Fi</button>
+                <button class="toggle-btn" data-genre="mystery" aria-label="Select Mystery genre">Mystery</button>
+                <button class="toggle-btn" data-genre="adventure" aria-label="Select Adventure genre">Adventure</button>
+            </div>
+
+            <div class="input-wrapper">
+                <textarea
+                    id="storyInput"
+                    class="input-field"
+                    placeholder="Describe your story idea, character, or setting..."
+                    aria-label="Enter story idea"
+                ></textarea>
+                <button id="generateBtn" class="send-btn" aria-label="Generate Story">
+                    <i class="fas fa-magic"></i>
+                </button>
+            </div>
+
+            <div class="suggestions">
+                <button class="suggestion-btn" data-suggestion="A young mage discovering their powers in a hidden magical academy" aria-label="Suggest mage story">
+                    A young mage discovering their powers
+                </button>
+                <button class="suggestion-btn" data-suggestion="A space explorer finding an ancient alien artifact on a distant planet" aria-label="Suggest space explorer story">
+                    A space explorer finding an alien artifact
+                </button>
+                <button class="suggestion-btn" data-suggestion="A detective solving a mysterious disappearance in a small coastal town" aria-label="Suggest detective story">
+                    A detective solving a mysterious disappearance
+                </button>
+            </div>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <div class="typing">
+                Weaving your story
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+        </div>
+
+        <div id="generatedStory" class="hidden"></div>
+    </main>
+
+    <script>
+        const generateBtn = document.getElementById('generateBtn');
+        const storyInput = document.getElementById('storyInput');
+        const loading = document.getElementById('loading');
+        const generatedStory = document.getElementById('generatedStory');
+        let selectedGenre = 'fantasy';
+        let isGenerating = false;
+
+        // Create stars for background
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const starsCount = 100;
+            
+            for (let i = 0; i < starsCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // Random position
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                
+                // Random size
+                const size = Math.random() * 3;
+                
+                // Random animation delay
+                const delay = Math.random() * 5;
+                
+                star.style.left = `${x}%`;
+                star.style.top = `${y}%`;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.animationDelay = `${delay}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Debounce function for touch events
+        function debounce(func, wait) {
+            let timeout;
+            return function (...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
+
+        // Handle genre toggle
+        document.querySelectorAll('.toggle-btn').forEach(btn => {
+            const handler = () => {
+                document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                selectedGenre = btn.dataset.genre;
+            };
+            btn.addEventListener('click', handler);
+            btn.addEventListener('touchstart', debounce(handler, 200), { passive: true });
+        });
+
+        // Handle suggestions
+        document.querySelectorAll('.suggestion-btn').forEach(btn => {
+            const handler = () => {
+                storyInput.value = btn.dataset.suggestion;
+                storyInput.focus();
+                generateStory();
+            };
+            btn.addEventListener('click', handler);
+            btn.addEventListener('touchstart', debounce(handler, 200), { passive: true });
+        });
+
+        // Auto-resize textarea and save to localStorage
+        storyInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.max(this.scrollHeight, 120) + 'px';
+            localStorage.setItem('lastStory', this.value);
+        });
+
+        // Load saved input
+        storyInput.value = localStorage.getItem('lastStory') || '';
+
+        // Handle Enter key (without Shift) to generate
+        storyInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                generateStory();
+            }
+        });
+
+        // Generate story
+        async function generateStory() {
+            if (isGenerating) return;
+            isGenerating = true;
+
+            const topic = storyInput.value.trim();
+            if (!topic) {
+                storyInput.focus();
+                displayGeneratedStory('Please enter a story idea to generate a tale.');
+                isGenerating = false;
+                return;
+            }
+
+            loading.classList.remove('hidden');
+            generatedStory.classList.add('hidden');
+            generateBtn.disabled = true;
+
+            const genreInstructions = `Write a captivating ${selectedGenre} story based on the following idea: "${topic}". 
+            Create an engaging narrative with vivid descriptions, interesting characters, and a compelling plot. 
+            Make it approximately 500-700 words with a clear beginning, middle, and end.`;
+
+            const timeout = setTimeout(() => {
+                loading.classList.add('hidden');
+                generateBtn.disabled = false;
+                displayGeneratedStory('Request timed out. Please try again.');
+                isGenerating = false;
+            }, 15000);
+
+            try {
+                const response = await fetch('https://backend.buildpicoapps.com/aero/run/llm-api?pk=v1-Z0FBQUFBQm5HUEtMSjJkakVjcF9IQ0M0VFhRQ0FmSnNDSHNYTlJSblE0UXo1Q3RBcjFPcl9YYy1OZUhteDZWekxHdWRLM1M1alNZTkJMWEhNOWd4S1NPSDBTWC12M0U2UGc9PQ==', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: genreInstructions })
+                });
+
+                clearTimeout(timeout);
+
+                if (!response.ok) {
+                    throw new Error(`API request failed with status ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    displayGeneratedStory(data.text);
+                    // Scroll to generated story
+                    generatedStory.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } else {
+                    throw new Error(data.error || 'Generation failed');
+                }
+            } catch (error) {
+                clearTimeout(timeout);
+                console.error('Error:', error);
+                displayGeneratedStory(`Error: ${error.message}. Please try again later.`);
+            } finally {
+                loading.classList.add('hidden');
+                generateBtn.disabled = false;
+                isGenerating = false;
+            }
+        }
+
+        // Display generated story
+        function displayGeneratedStory(content) {
+            const storyHTML = `
+                <div class="generated-story">
+                    <div class="story-header">
+                        <div class="story-title">
+                            <i class="fas fa-book-open"></i>
+                            Your Story
+                            <span class="genre-badge">${selectedGenre}</span>
+                        </div>
+                        <button class="copy-btn" aria-label="Copy story">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                    <div class="story-content">${formatStoryContent(content)}</div>
+                </div>
+            `;
+            
+            generatedStory.innerHTML = storyHTML;
+            generatedStory.classList.remove('hidden');
+        }
+
+        // Format story content with paragraphs
+        function formatStoryContent(content) {
+            // Split content into paragraphs based on common paragraph breaks
+            let paragraphs = content.split(/\n\s*\n/);
+            
+            // If no clear paragraphs, try splitting by single newlines
+            if (paragraphs.length <= 1) {
+                paragraphs = content.split(/\n/);
+            }
+            
+            // Wrap each paragraph in <p> tags
+            return paragraphs.map(p => `<p>${p.trim()}</p>`).join('');
+        }
+
+        // Copy story to clipboard
+        function copyStory(btn) {
+            const storyContent = btn.closest('.generated-story').querySelector('.story-content').textContent;
+            
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(storyContent).then(() => {
+                    const icon = btn.querySelector('i');
+                    icon.className = 'fas fa-check';
+                    btn.classList.add('copied');
+                    setTimeout(() => {
+                        icon.className = 'fas fa-copy';
+                        btn.classList.remove('copied');
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Clipboard API failed:', err);
+                    fallbackCopy(storyContent, btn);
+                });
+            } else {
+                fallbackCopy(storyContent, btn);
+            }
+        }
+
+        // Fallback for clipboard copy
+        function fallbackCopy(text, btn) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                const icon = btn.querySelector('i');
+                icon.className = 'fas fa-check';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    icon.className = 'fas fa-copy';
+                    btn.classList.remove('copied');
+                }, 2000);
+            } catch (err) {
+                console.error('Fallback copy failed:', err);
+            }
+            document.body.removeChild(textarea);
+        }
+
+        // Attach generate event
+        const generateHandler = debounce(generateStory, 200);
+        generateBtn.addEventListener('click', generateHandler);
+        generateBtn.addEventListener('touchstart', generateHandler, { passive: true });
+
+        // Attach copy event
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.copy-btn')) {
+                copyStory(e.target.closest('.copy-btn'));
+            }
+        });
+        document.addEventListener('touchstart', (e) => {
+            if (e.target.closest('.copy-btn')) {
+                debounce(() => copyStory(e.target.closest('.copy-btn')), 200)();
+            }
+        }, { passive: true });
+
+        // Focus input on load (avoid on mobile to prevent keyboard popup)
+        if (!/Mobi|Android/i.test(navigator.userAgent)) {
+            storyInput.focus();
+        }
+
+        // Initialize stars
+        createStars();
+    </script>
+</body>
+</html>
